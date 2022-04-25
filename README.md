@@ -3,3 +3,7 @@
 It's, like, prototype stuff.
 
 https://khawkins98.github.io/frontend-tooling-prototypes/
+
+- js
+- css
+- some image assets
