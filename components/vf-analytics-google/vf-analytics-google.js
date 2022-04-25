@@ -123,6 +123,9 @@ function vfGaInit(vfGaTrackOptions) {
     /* eslint-enable no-redeclare*/
     if (vfGaTrackOptions.vfGaTrackPageLoad == null) vfGaTrackOptions.vfGaTrackPageLoad = true;
 
+    // todo: if create tracker
+    ga('create', 'UA-1885952-18')
+
     // Need help
     // How to add dimension to your property
     // https://developers.google.com/analytics/devguides/collection/analyticsjs/custom-dims-mets
