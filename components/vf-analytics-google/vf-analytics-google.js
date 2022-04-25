@@ -548,7 +548,7 @@ function vfGaLogMessage(eventCategory, eventAction, eventLabel, lastGaEventTime,
 // You should also import it at ./components/vf-core/scripts.js
 // import { vfcomponentName } from '../components/raw/vf-analytics-google/vf-analytics-google.js';
 // And, if needed, invoke it
-// vfGaIndicateLoaded();
+vfGaIndicateLoaded();
 
 // By default your component should be usable with js imports
-export { vfGaIndicateLoaded, vfGaTrackInteraction };
+// export { vfGaIndicateLoaded, vfGaTrackInteraction };
