@@ -19,19 +19,20 @@ function vfNavigationOnThisPage() {
     // exit: either sections or section content not found
     return;
   }
-  if (sectionList.length == 0 || section.length == 0) {
+  if (sectionList.length === 0 || section.length === 0) {
     // exit: either sections or section content not found
     return;
   }
 
-  section.forEach((e) => {
-    sectionPositions[e.id] = e.offsetTop;
-  });
-  section.forEach((e) => {
-    sectionHeights[e.id] = e.offsetHeight;
-  });
-
   function activateNavigationItem() {
+    // althought costly, we recalculate the position of elements each time as things move or load dynamically
+    section.forEach((e) => {
+      var rect = e.getBoundingClientRect();
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+      sectionPositions[e.id] = rect.top + scrollTop;
+      sectionHeights[e.id] = e.offsetHeight;
+    });
+
     var scrollPosition =
       document.documentElement.scrollTop || document.body.scrollTop;
     for (i in sectionPositions) {
@@ -47,15 +48,17 @@ function vfNavigationOnThisPage() {
           }
         }, "myThisArg");
       }
-      // if (i == "container-actions") {
-      //   console.log(sectionPositions[i] - scrollPosition, window.innerHeight);
-      //   console.log(sectionHeights[i]);
+      // if (i === "container-media") {
+      //   console.log("scrollPosition", scrollPosition);
+      //   console.log(
+      //     "bottom of element",
+      //     sectionPositions[i] + sectionHeights[i]
+      //   );
+      //   console.log("isNotYetOnScreen", sectionPositions[i] > scrollPosition);
       // }
-      if (
-        sectionPositions[i] - scrollPosition <=
-          -Math.abs(window.innerHeight + sectionHeights[i] - 70) ||
-        sectionPositions[i] - scrollPosition >= window.innerHeight
-      ) {
+      var isNotYetOnScreen = sectionPositions[i] > scrollPosition;
+      var bottomOfElement = sectionPositions[i] + sectionHeights[i];
+      if (scrollPosition - 70 > bottomOfElement || isNotYetOnScreen) {
         // we activate the container only while it is in view
         sectionList.forEach(function (currentValue, currentIndex, listObj) {
           if (currentValue.href.includes(i)) {
@@ -64,16 +67,18 @@ function vfNavigationOnThisPage() {
         }, "myThisArg");
       }
     }
+    isCalculating = false;
   }
 
+  var isCalculating = false;
   window.onscroll = function () {
-    // we could introduce throttling, but as this is a fairly simple repaint, throttling is not likely required
-    window.requestAnimationFrame(activateNavigationItem);
+    if (!isCalculating) {
+      isCalculating = true;
+      window.requestAnimationFrame(activateNavigationItem);
+    } else {
+      // console.log("throttled!");
+    }
   };
 }
 
 vfNavigationOnThisPage();
-
-// gar call to action
-// var gar = document.getElementById("container-gar-call-to-action");
-// vfNavigationOnThisPage(gar);
